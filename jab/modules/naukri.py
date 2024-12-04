@@ -238,6 +238,7 @@ class NaukriBot:
                 apply.click()
                 try:
                     expect(self.page.locator(".chatbot_MessageContainer")).to_be_visible(timeout=3000)
+                    self.cba.classify_new_question()
                     self.applied_count+=1
                 except:
                     try:

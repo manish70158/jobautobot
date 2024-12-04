@@ -230,21 +230,22 @@ class NaukriBot:
         )
         print(job_links)
         for jl in job_links:
+            self.page.wait_for_timeout(2000)
             self.page.goto(jl)
             self.page.wait_for_load_state('networkidle')
             try:
                 apply = self.page.query_selector('#apply-button')
                 apply.click()
                 try:
-                    self.page.wait_for_url(url = self.pattern,timeout = 5000,wait_until='networkidle')
-                except:
-                    if self.page.query_selector('.chatbot_DrawerContentWrapper'):
-                        self.cba.classify_new_question()
-                    else:
-                        pass                
-                finally:
+                    expect(self.page.locator(".chatbot_MessageContainer")).to_be_visible(timeout=3000)
                     self.applied_count+=1
-                    continue
+                except:
+                    try:
+                        expect(self.page).to_have_url(self.pattern)
+                        self.applied_count+=1
+                    except:
+                        print("daily quota finished")
+                        return
             except Exception as e:
                 print(jl,"_______", e)
                 continue         
@@ -263,7 +264,6 @@ class NaukriBot:
         self.filter_()
         self.page.wait_for_load_state('networkidle')
         self.apply_()
-        self.page.wait_for_timeout(2000)
         self.page.close()
         return {"response":"applied successfully","applied":self.applied_count}
 

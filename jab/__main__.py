@@ -24,7 +24,7 @@ def main():
             search = input("Job search criteria or keyword to search for (required if applying filters): ")
             experience = input("Years of experience (optional, leave blank if none): ")
             location = input("Job location (optional, leave blank if none): ")
-            jobAge = input("Age of job posting in days (optional, leave blank if none): ")
+            jobAge = input("Age of job posting in days (default set to 3 days): ")
             experience = int(experience) if experience else None
             jobAge = int(jobAge) if jobAge else None
             nb.filter_apply(search,experience,location,jobAge)

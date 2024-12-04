@@ -176,18 +176,18 @@ class ChatbotBuild:
 
     def build_model(self):
         self.model = tf.keras.models.Sequential([
-            # tf.keras.layers.Input(shape=(len(self.train_x[0]),)),
-            tf.keras.layers.Dense(128, input_shape= (len(self.train_x[0]),),activation='relu'),
+            tf.keras.layers.Input(shape=(len(self.train_x[0]),)),
+            tf.keras.layers.Dense(128 , activation='relu'),
             tf.keras.layers.Dropout(0.5),
             tf.keras.layers.Dense(64, activation='relu'),
             tf.keras.layers.Dropout(0.5),
             tf.keras.layers.Dense(len(self.classes), activation='softmax')
         ])
-        # adam = tf.keras.optimizers.Adam(learning_rate=0.001)
-        self.model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+        adam = tf.keras.optimizers.Adam(learning_rate=0.001)
+        self.model.compile(loss='categorical_crossentropy', optimizer=adam, metrics=['accuracy'])
 
     def train_model(self):
-        self.model.fit(np.array(self.train_x), np.array(self.train_y), epochs=100, batch_size=8, verbose=1)
+        self.model.fit(np.array(self.train_x), np.array(self.train_y), epochs=100, batch_size=5, verbose=1)
         if not os.path.exists(f"./jab/data/{self.username}"):
             os.mkdir(f"./jab/data/{self.username}")
         self.model.save(f'./jab/data/{self.username}/model.keras')

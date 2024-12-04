@@ -14,7 +14,6 @@ class ChatbotModel():
         self.lemmatizer = WordNetLemmatizer()
         self.ignore_words = ['?', '!', '.', ',']
         self.user_data = user_data
-        self.bucket_name = "models_jobautobot"
         self.words = []
         self.classes = []
         self.load_data()
@@ -93,7 +92,7 @@ class ChatbotAgent:
         return score['compound'] 
     
     def match_by_sentiment(self,target, strings):
-        target_sentiment = self.sentiment_score(target)        
+        target_sentiment = self.sentiment_score(target)
         sentiment_diffs = []
         for string in strings:
             string_sentiment = self.sentiment_score(string)
@@ -102,22 +101,6 @@ class ChatbotAgent:
         
         best_match = min(sentiment_diffs, key=lambda x: x[1])
         return best_match[0], best_match[1]
-    
-    def save_qa(self, new_data):
-        try:
-            with open(self.file_path, 'r') as file:
-                existing_data = json.load(file)
-            if not (new_data == existing_data[-1]):
-                existing_data.append(new_data)
-            else:
-                return
-            with open(self.file_path, 'w') as file:
-                json.dump(existing_data, file, indent=4)
-            print("JSON file updated successfully.")
-            return True
-        except Exception as e:
-            print(f"Error updating JSON file: {e}")
-            return False
 
     def classify_new_question(self):
         page=self.page
@@ -161,16 +144,16 @@ class ChatbotAgent:
                     finnas = self.match_by_sentiment(answer,options)[0]
                     page.click(f'text="{finnas}"')
                 elif dob:
-                    dob = answer.split("/")
-                    page.locator("input[name='day']").type(dob[0])
-                    page.locator("input[name='month']").type(dob[1])
-                    page.locator("input[name='year']").type(dob[2])
+                    dob = answer.strip().split("/")
+                    page.locator("input[name='day']").type(dob[0],delay=100)
+                    page.locator("input[name='month']").type(dob[1],delay=100)
+                    page.locator("input[name='year']").type(dob[2],delay=100)
 
                 else:
                     return 
                 send = page.locator('.sendMsg')
                 try:
-                    expect(send)
+                    expect(send).to_be_enabled()
                     time.sleep(0.5)
                     send.click(timeout=3000)
                 except:
@@ -188,6 +171,7 @@ class NaukriBot:
         self.username = username
         self.applno = number
         self.applied_count = 0
+        self.pattern = re.compile(r'https://.*/myapply/saveApply\?strJobsarr=')
 
     def init_browser(self):
         playwright = sync_playwright().start()
@@ -215,7 +199,6 @@ class NaukriBot:
             return False
         
     def checkbox_apply(self):
-        pattern = re.compile(r'https://.*/myapply/saveApply\?strJobsarr=')
         try:
             checkboxes = self.page.locator('.naukicon-ot-checkbox').element_handles()
             print(f"Found {len(checkboxes)} checkboxes.")
@@ -230,17 +213,17 @@ class NaukriBot:
                     expect(self.page.locator(".chatbot_MessageContainer")).to_be_visible(timeout=3000)
                 except:
                     try:
-                        expect(self.page).to_have_url(pattern)
+                        expect(self.page).to_have_url(self.pattern)
+                        return {"status":"done","clicked":lcbxs}
                     except:
                         raise
-                return {"found":len(checkboxes),"clicked":lcbxs}
+                return {"status":"underway","found":len(checkboxes),"clicked":lcbxs}
             else:
-                return {"found":len(checkboxes),"clicked":0}
-        except Exception as e:
-            return "NA"
+                return {"status":"finished","found":len(checkboxes),"clicked":0}
+        except Exception:
+            return {"status":"failed"}
         
     def apply_(self):
-        pattern = re.compile(r'https://.*/myapply/saveApply\?strJobsarr=')
         job_links = self.page.eval_on_selector_all(
             '.title',
             'elements => elements.map(element => element.getAttribute("href")) .filter(href => href !==null)'
@@ -253,7 +236,7 @@ class NaukriBot:
                 apply = self.page.query_selector('#apply-button')
                 apply.click()
                 try:
-                    self.page.wait_for_url(url = pattern,timeout = 5000,wait_until='networkidle')
+                    self.page.wait_for_url(url = self.pattern,timeout = 5000,wait_until='networkidle')
                 except:
                     if self.page.query_selector('.chatbot_DrawerContentWrapper'):
                         self.cba.classify_new_question()
@@ -268,6 +251,9 @@ class NaukriBot:
 
     def filter_apply(self,s,e='',l='',ja='3'):
         self.search = s
+        if not self.search:
+            print("Search keyword required")
+            return
         self.experience = e
         self.location = l
         self.jobage = ja
@@ -283,12 +269,10 @@ class NaukriBot:
 
     def filter_(self):
         serch = self.page.locator(".nI-gNb-sb__icon-wrapper")
-        serch.click()
-        if not self.search:
-            return 
-        self.page.locator('input[placeholder="Enter keyword / designation / companies"]').fill(self.search)
+        serch.click() 
+        self.page.locator('input[placeholder="Enter keyword / designation / companies"]').type(self.search,delay=100)
         if self.location:
-            self.page.locator('input[placeholder="Enter location"]').fill(self.location)
+            self.page.locator('input[placeholder="Enter location"]').type(self.location,delay=100)
         if self.experience:
             self.page.locator('#experienceDD').click()
             self.page.locator(f'li[index="{self.experience}"]').click()
@@ -307,38 +291,42 @@ class NaukriBot:
         if self.login():
             botactions = self.bot_actions()
             return botactions
+        
     def bot_actions(self):
-        self.page.click('.nI-gNb-menuItems__anchorDropdown')
-        pattern = re.compile(r'https://.*/myapply/saveApply\?strJobsarr=')
-        if not self.tab=="profile":
-            self.page.click(f"#{self.tab}")
-        self.page.wait_for_load_state("networkidle")
-        cbapl = self.checkbox_apply()
-        if cbapl == 'NA':
-            print("finished daily quota")
-            self.close()
-            return {"response":"quota finished","applied":self.applied_count}
         try:
-            if cbapl['clicked']==0:
-                self.tabIndex += 1
-                self.tab = self.tabs[self.tabIndex]
-            else:
-                try:
-                    self.cba.classify_new_question()
-                except:
-                    pass
-                self.page.wait_for_url(url = pattern,timeout = 30000,wait_until='networkidle')
-                self.applied_count += cbapl["clicked"]
-            if self.applied_count<self.applno:
-                self.bot_actions()
-            else:
-                self.close()
+            time.sleep(2)
+            self.page.click('.nI-gNb-menuItems__anchorDropdown')
+            if not self.tab=="profile":
+                self.page.click(f"#{self.tab}")
+            self.page.wait_for_load_state("networkidle")
+            if self.applied_count >= self.applno:
                 print(f"applied {self.applied_count} jobs")
                 return {"response":"applied successfully","applied":self.applied_count}
+            else:
+                cbapl = self.checkbox_apply()
+            if cbapl["status"] == 'failed':
+                print("finished daily quota")
+                self.close()
+                return {"response":"quota finished","applied":self.applied_count}
+            elif cbapl["status"] == 'done':
+                self.applied_count += cbapl["clicked"]
+                self.bot_actions()
+            elif cbapl["status"] == 'underway':
+                self.cba.classify_new_question()
+                try:
+                    expect(self.page).to_have_url(self.pattern)
+                    self.applied_count += cbapl["clicked"]
+                    self.bot_actions()
+                except Exception as e:
+                    print("An error occured answering naukri questions :===>",e)
+                    self.close()
+                    return {"response":"error on botactions","error":str(e)}
+            elif cbapl['status']=="finished":
+                self.tabIndex += 1
+                self.tab = self.tabs[self.tabIndex]
         except Exception as e:
-            print(e)
             self.close()
-            return {"response":"error on botactions","error":str(e)}
+            print(f"applied {self.applied_count} jobs but an error occured :===>{str(e)}")
         
     def close(self):
         self.browser.close()

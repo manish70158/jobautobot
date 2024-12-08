@@ -119,8 +119,8 @@ class ChatbotAgent:
                 checkboxes = cbcn.query_selector_all('input[type="checkbox"]')
                 radio_buttons = cbcn.query_selector_all('input[type="radio"]')
                 text_input = page.locator('.chatbot_MessageContainer .textArea')
-                chip = page.query_selector('.chipsContainer .chatbot_Chip')
-                suggs = page.query_selector_all('.ssc__heading')
+                chip = page.query_selector('.chatbot_MessageContainer .chipsContainer .chatbot_Chip')
+                suggs = cbcn.query_selector_all('.ssc__heading')
                 dob = cbcn.query_selector(".dob__container")
                 if chip:
                     print("skipping")
@@ -142,6 +142,7 @@ class ChatbotAgent:
                     print("found suggs")
                     options = [el.evaluate('el => el.innerText') for el in suggs]
                     finnas = self.match_by_sentiment(answer,options)[0]
+                    print(finnas)
                     page.click(f'text="{finnas}"')
                 elif dob:
                     dob = answer.strip().split("/")

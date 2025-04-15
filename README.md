@@ -26,9 +26,14 @@ For linux
 ```bash
 python3 -m venv jbvnv && source jbvnv/bin/activate
 ```
-For Windows
+For Windows powershell
 ```bash
 python -m venv jbvnv &&  jbvnv/scripts/activate.ps1
+```
+For Windows cmd
+```bash
+python -m venv jbvnv
+call jbvnv/scripts/activate
 ```
 step 4: Install the required packages
 ```bash
@@ -70,3 +75,5 @@ If you would like to apply filters to search for the jobs run:
 python -m jab --email your-email@gmail.com --apply --filters
 ```
 follow along the prompts to put in your password and select the filters you would like to apply.
+
+Complete documentation can be found here: https://aman-dayal.github.io/Documentation-for-JobAutobot

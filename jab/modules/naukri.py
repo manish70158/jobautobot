@@ -252,7 +252,7 @@ class NaukriBot:
                         expect(self.page).to_have_url(self.pattern)
                         self.applied_count+=1
                     except:
-                        print("daily quota finished")
+                        print(f"✅ Applied to {self.applied_count} jobs.")
                         return
             except Exception as e:
                 print(jl,"_______", e)
@@ -262,7 +262,11 @@ class NaukriBot:
             parsed = urlparse(self.base_page_url)
             new_path = parsed.path + f"-{self.page_no}"
             modified_url = urlunparse(parsed._replace(path=new_path))
-            self.page.goto(modified_url)
+            try:
+                self.page.goto(modified_url)
+            except:
+                print(f"✅ Applied to {self.applied_count} jobs.")
+                return
             print(f'goin to page {self.page_no}')
             self.apply_()
 

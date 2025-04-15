@@ -4,6 +4,7 @@ import numpy as np
 import nltk 
 import time
 import json
+from urllib.parse import urlparse, urlunparse
 from playwright.sync_api import sync_playwright , expect
 import tensorflow as tf
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
@@ -82,7 +83,7 @@ class ChatbotAgent:
         global user
         user = username
         self.page = page
-        with open(f"./jab/data/{user}/trainig_data.json", 'r') as json_file:
+        with open(f"./jab/data/{user}/training_data.json", 'r') as json_file:
             user_data = json.load(json_file)    
         self.model = ChatbotModel(user_data)
         self.analyzer = SentimentIntensityAnalyzer()
@@ -119,8 +120,8 @@ class ChatbotAgent:
                 checkboxes = cbcn.query_selector_all('input[type="checkbox"]')
                 radio_buttons = cbcn.query_selector_all('input[type="radio"]')
                 text_input = page.locator('.chatbot_MessageContainer .textArea')
-                chip = page.query_selector('.chipsContainer .chatbot_Chip')
-                suggs = page.query_selector_all('.ssc__heading')
+                chip = page.query_selector('.chatbot_MessageContainer .chipsContainer .chatbot_Chip')
+                suggs = cbcn.query_selector_all('.ssc__heading')
                 dob = cbcn.query_selector(".dob__container")
                 if chip:
                     print("skipping")
@@ -142,6 +143,7 @@ class ChatbotAgent:
                     print("found suggs")
                     options = [el.evaluate('el => el.innerText') for el in suggs]
                     finnas = self.match_by_sentiment(answer,options)[0]
+                    print(finnas)
                     page.click(f'text="{finnas}"')
                 elif dob:
                     dob = answer.strip().split("/")
@@ -171,6 +173,8 @@ class NaukriBot:
         self.username = username
         self.applno = number
         self.applied_count = 0
+        self.page_no = 1
+        self.tabs = ["profile","apply","preference","similar_jobs"]
         self.pattern = re.compile(r'https://.*/myapply/saveApply\?strJobsarr=')
 
     def init_browser(self):
@@ -224,16 +228,19 @@ class NaukriBot:
             return {"status":"failed"}
         
     def apply_(self):
+
         job_links = self.page.eval_on_selector_all(
             '.title',
             'elements => elements.map(element => element.getAttribute("href")) .filter(href => href !==null)'
         )
-        print(job_links)
         for jl in job_links:
-            self.page.wait_for_timeout(2000)
-            self.page.goto(jl)
-            self.page.wait_for_load_state('networkidle')
+            if self.applied_count >= self.applno:
+                print(f"✅ Applied to {self.applied_count} jobs.")
+                break
             try:
+                self.page.wait_for_timeout(2000)
+                self.page.goto(jl)
+                self.page.wait_for_load_state('networkidle')
                 apply = self.page.query_selector('#apply-button')
                 apply.click()
                 try:
@@ -249,7 +256,16 @@ class NaukriBot:
                         return
             except Exception as e:
                 print(jl,"_______", e)
-                continue         
+                continue 
+        if self.applied_count<self.applno:
+            self.page_no+=1
+            current_url = self.page.url
+            parsed = urlparse(current_url)
+            new_path = parsed.path + f"-{self.page_no}"
+            modified_url = urlunparse(parsed._replace(path=new_path))
+            self.page.goto(modified_url)
+            print(f'goin to page {self.page_no}')
+            self.apply_()
 
     def filter_apply(self,s,e='',l='',ja='3'):
         self.search = s
@@ -284,10 +300,9 @@ class NaukriBot:
             nurl = curl+f"&jobAge={self.jobage}"
             self.page.goto(nurl)
 
-    def start_apply(self):
-        self.tabs = ["profile","apply","preference","similar_jobs"]
+    def start_apply(self,tab):
         self.tabIndex = 0
-        self.tab = "profile"
+        self.tab = tab
         self.init_browser()
         if self.login():
             botactions = self.bot_actions()
@@ -306,7 +321,7 @@ class NaukriBot:
             else:
                 cbapl = self.checkbox_apply()
             if cbapl["status"] == 'failed':
-                print("finished daily quota")
+                print(f"finished daily quota with {self.applied_count} jobs")
                 self.close()
                 return {"response":"quota finished","applied":self.applied_count}
             elif cbapl["status"] == 'done':
@@ -325,6 +340,7 @@ class NaukriBot:
             elif cbapl['status']=="finished":
                 self.tabIndex += 1
                 self.tab = self.tabs[self.tabIndex]
+                self.bot_actions()
         except Exception as e:
             self.close()
             print(f"applied {self.applied_count} jobs but an error occured :===>{str(e)}")

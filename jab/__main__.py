@@ -18,7 +18,8 @@ def main():
         filt = args.filters
         print("filters",filt)
         password = getpass("Password: ")
-        nb = NaukriBot(email,password,username)
+        number = int(input("Number of jobs to apply (default=10): ") or 10)
+        nb = NaukriBot(email,password,username,number)
         if filt:
             print("Choose your filters to apply::::")
             search = input("Job search criteria or keyword to search for (required if applying filters): ")
@@ -29,15 +30,14 @@ def main():
             jobAge = int(jobAge) if jobAge else None
             nb.filter_apply(search,experience,location,jobAge)
         else:
-            number = int(input("Number of jobs to apply (default=10): ") or 10)
-            nb.applno = number
-            nb.start_apply()
+            tab = input(f"Choose from these options to start: {nb.tabs} : ")
+            nb.start_apply(tab)
     elif args.train:
         chb = ChatbotBuild(email)
         chb.train_model()
-        trainig_data = chb.training_data
-        with open(f"./jab/data/{username}/trainig_data.json","w+") as f:
-            f.write(json.dumps(trainig_data,indent=4))
+        training_data = chb.training_data
+        with open(f"./jab/data/{username}/training_data.json","w+") as f:
+            f.write(json.dumps(training_data,indent=4))
     else:
         print("Use --apply to start applying or --train to train the model")
 

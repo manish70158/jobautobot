@@ -33,7 +33,7 @@ python -m venv jbvnv &&  jbvnv/scripts/activate.ps1
 For Windows cmd
 ```bash
 python -m venv jbvnv
-call jbvnv/scripts/activate.ps1
+call jbvnv/scripts/activate
 ```
 step 4: Install the required packages
 ```bash

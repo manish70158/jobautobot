@@ -228,7 +228,7 @@ class NaukriBot:
             return {"status":"failed"}
         
     def apply_(self):
-
+        self.page.wait_for_load_state('networkidle')
         job_links = self.page.eval_on_selector_all(
             '.title',
             'elements => elements.map(element => element.getAttribute("href")) .filter(href => href !==null)'
@@ -259,8 +259,7 @@ class NaukriBot:
                 continue 
         if self.applied_count<self.applno:
             self.page_no+=1
-            current_url = self.page.url
-            parsed = urlparse(current_url)
+            parsed = urlparse(self.base_page_url)
             new_path = parsed.path + f"-{self.page_no}"
             modified_url = urlunparse(parsed._replace(path=new_path))
             self.page.goto(modified_url)
@@ -279,7 +278,7 @@ class NaukriBot:
         self.login()
         time.sleep(1)
         self.filter_()
-        self.page.wait_for_load_state('networkidle')
+        self.base_page_url = self.page.url
         self.apply_()
         self.page.close()
         return {"response":"applied successfully","applied":self.applied_count}

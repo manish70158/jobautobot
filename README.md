@@ -26,9 +26,14 @@ For linux
 ```bash
 python3 -m venv jbvnv && source jbvnv/bin/activate
 ```
-For Windows
+For Windows powershell
 ```bash
 python -m venv jbvnv &&  jbvnv/scripts/activate.ps1
+```
+For Windows cmd
+```bash
+python -m venv jbvnv
+call jbvnv/scripts/activate.ps1
 ```
 step 4: Install the required packages
 ```bash

@@ -1,0 +1,264 @@
+[
+    {
+        "patterns": [
+            "What is your full name?",
+            "Tell me your full name.",
+            "What is your name?",
+            "Can I have your full name?"
+        ],
+        "tag": "full_name",
+        "answer": "Manish Kumar"
+    },
+    {
+        "patterns": [
+            "what is your gender?",
+            "what do you identify as?",
+            "Gender"
+        ],
+        "tag": "gender",
+        "answer": "Male"
+    },
+    {
+        "patterns": [
+            "What is your mobile number?",
+            "Tell me your phone number.",
+            "What is cell phone number?",
+            "Can I have your mobile phone number?"
+        ],
+        "tag": "mobile",
+        "answer": "+91-7015874118"
+    },
+    {
+        "patterns": [
+            "What is your email address?",
+            "Tell me your email.",
+            "What is your email?",
+            "Can I have your email?"
+        ],
+        "tag": "email",
+        "answer": "a.manish1689@gmail.com"
+    },
+    {
+        "patterns": [
+            "Where are you located?",
+            "What is your location?",
+            "Where do you live?",
+            "Your current city?",
+            "which state are you from?"
+        ],
+        "tag": "location",
+        "answer": "Gurugram"
+    },
+    {
+        "patterns": [
+            "What is your current salary?",
+            "What is your CTC?",
+            "How much are you earning?",
+            "What is your income?"
+        ],
+        "tag": "current_salary",
+        "answer": "5000000"
+    },
+    {
+        "patterns": [
+            "What is your first name?",
+            "Tell me your first name.",
+            "What is your given name?",
+            "Can I know your first name?"
+        ],
+        "tag": "first_name",
+        "answer": "Manish"
+    },
+    {
+        "patterns": [
+            "What is your last name?",
+            "What is your surname?",
+            "Tell me your last name.",
+            "Your family name?"
+        ],
+        "tag": "last_name",
+        "answer": "Kumar"
+    },
+    {
+        "patterns": [
+            "What is your date of birth?",
+            "When is your birthday?",
+            "What is your DOB?",
+            "Your birth date?"
+        ],
+        "tag": "date_of_birth",
+        "answer": "01/06/1990"
+    },
+    {
+        "patterns": [
+            "What is your expected salary?",
+            "What is your desired CTC?",
+            "What salary are you expecting?",
+            "Your expected income?"
+        ],
+        "tag": "expected_salary",
+        "answer": "6000000"
+    },
+    {
+        "patterns": [
+            "What is your preferred work location?",
+            "Where do you prefer to work?",
+            "What is your desired job location?",
+            "Your preferred city for work?"
+        ],
+        "tag": "preferred_location",
+        "answer": "Gurugram"
+    },
+    {
+        "patterns": [
+            "What is your notice period?",
+            "When can you join?",
+            "What is your availability to join?",
+            "How soon can you start?"
+        ],
+        "tag": "notice_period",
+        "answer": "30"
+    },
+    {
+        "patterns": [
+            "How many years of experience do you have?",
+            "What is your current experience?",
+            "How much experience do you have?",
+            "Your total work experience?",
+            "Current professional experience?"
+        ],
+        "tag": "current_experience",
+        "answer": "13"
+    },
+    {
+        "patterns": [
+            "Have you worked at our organization?",
+            "Were you previously employed by organization?",
+            "Did you work for organization?"
+        ],
+        "tag": "bool_employee",
+        "answer": "No"
+    },
+    {
+        "patterns": [
+            "How should we address you?",
+            "What is your salutation?",
+            "What is your title?",
+            "How do you prefer to be addressed?"
+        ],
+        "tag": "salutation",
+        "answer": ""
+    },
+    {
+        "patterns": [
+            "I consent to the Privacy Policy",
+            "Do you agree to the Privacy Policy?",
+            "I accept the Privacy Policy",
+            "Consent to the Privacy Policy"
+        ],
+        "tag": "privacy_policy_consent",
+        "answer": "Yes"
+    },
+    {
+        "patterns": [
+            "Are you currently residing in location or willing to relocate to location?",
+            "Do you live in location or are you open to relocating?",
+            "Are you based in location or would you move to location?",
+            "Are you willing to move to location?",
+            "Do you live in location or are you considering relocating?"
+        ],
+        "tag": "relocation_bool",
+        "answer": "yes"
+    },
+    {
+        "patterns": [
+            "How many years of experience do you have in Java ?",
+            "Experience in Java",
+            "How long have you been working with Java ?"
+        ],
+        "tag": "Java_exp",
+        "answer": "Expert"
+    },
+    {
+        "patterns": [
+            "How many years of experience do you have in Spring Boot ?",
+            "Experience in Spring Boot",
+            "How long have you been working with Spring Boot ?"
+        ],
+        "tag": "Spring Boot_exp",
+        "answer": "Expert"
+    },
+    {
+        "patterns": [
+            "How many years of experience do you have in Microservices ?",
+            "Experience in Microservices",
+            "How long have you been working with Microservices ?"
+        ],
+        "tag": "Microservices_exp",
+        "answer": "Expert"
+    },
+    {
+        "patterns": [
+            "How many years of experience do you have in Hibernate ?",
+            "Experience in Hibernate",
+            "How long have you been working with Hibernate ?"
+        ],
+        "tag": "Hibernate_exp",
+        "answer": "Expert"
+    },
+    {
+        "patterns": [
+            "How many years of experience do you have in SQL ?",
+            "Experience in SQL",
+            "How long have you been working with SQL ?"
+        ],
+        "tag": "SQL_exp",
+        "answer": "Expert"
+    },
+    {
+        "patterns": [
+            "How many years of experience do you have in REST APIs ?",
+            "Experience in REST APIs",
+            "How long have you been working with REST APIs ?"
+        ],
+        "tag": "REST APIs_exp",
+        "answer": "Expert"
+    },
+    {
+        "patterns": [
+            "How many years of experience do you have in Docker ?",
+            "Experience in Docker",
+            "How long have you been working with Docker ?"
+        ],
+        "tag": "Docker_exp",
+        "answer": "Intermediate"
+    },
+    {
+        "patterns": [
+            "How many years of experience do you have in Kubernetes ?",
+            "Experience in Kubernetes",
+            "How long have you been working with Kubernetes ?"
+        ],
+        "tag": "Kubernetes_exp",
+        "answer": "Intermediate"
+    },
+    {
+        "patterns": [
+            "How many years of experience do you have in AWS ?",
+            "Experience in AWS",
+            "How long have you been working with AWS ?"
+        ],
+        "tag": "AWS_exp",
+        "answer": "Intermediate"
+    },
+    {
+        "patterns": [
+            "What are your key skills?",
+            "Tell me your skills.",
+            "What skills do you have?",
+            "Your key competencies?"
+        ],
+        "tag": "Skills",
+        "answer": "Java, Spring Boot, Microservices, Hibernate, SQL, REST APIs, Docker, Kubernetes, AWS"
+    }
+]

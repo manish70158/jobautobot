@@ -62,13 +62,15 @@ Make sure you are in the root directory of the project and the virtual environme
 
 To train the model run:
 ```bash
-python -m jab --email your-email@gmail.com --train
+# python -m jab --email a.manish1689@gmail.com --train
+python -m jab --email kumar.manish1689@gmail.com --train
 ```
 Replace your-email@gmail.com with your actual email, this email is used to identify your trained model and data when sending out job applications. The model will be trained and saved in the jab/data/your-email@gmail.com models directory.
 
 You are all set and ready to send out your first application using jobautobot or jab. To send out a job application run:
 ```bash
-python -m jab --email your-email@gmail.com --apply
+# python -m jab --email a.manish1689@gmail.com --apply
+python -m jab --email kumar.manish1689@gmail.com --apply
 ```
 If you would like to apply filters to search for the jobs run:
 ```bash

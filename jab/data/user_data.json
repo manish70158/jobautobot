@@ -1,19 +1,27 @@
 {
     "Salutation":"",
-    "Full name": "",
-    "First name": "",
-    "Last name": "",
-    "Location": "",
-    "Total experience": "",
-    "Expected salary": "",
-    "Salary": "",
-    "Mobile": "",
-    "Email": "",
-    "Notice period": "",
+    "Full name": "Manish Kumar",
+    "First name": "Manish",
+    "Last name": "Kumar",
+    "Location": "Gurugram",
+    "Total experience": "13",
+    "Expected salary": "6000000",
+    "Salary": "5000000",
+    "Mobile": "+91-7015874118",
+    "Email": "a.manish1689@gmail.com",
+    "Notice period": "30",
     "Skills": {
-
+"Java": "Expert",
+        "Spring Boot": "Expert",
+        "Microservices": "Expert",
+        "Hibernate": "Expert",
+        "SQL": "Expert",
+        "REST APIs": "Expert",
+        "Docker": "Intermediate",
+        "Kubernetes": "Intermediate",
+        "AWS": "Intermediate"
     },
-    "Date of birth": "",
-    "Gender": "",
-    "Preferred work location": ""
+    "Date of birth": "01/06/1990",
+    "Gender": "Male",
+    "Preferred work location": "Gurugram"
 }
